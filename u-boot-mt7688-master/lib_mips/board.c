@@ -2001,7 +2001,28 @@ void board_init_r (gd_t *id, ulong dest_addr)
 	putc ('\n');
 	if(BootType == '3') {
 		char *argv[2];
-		sprintf(addr_str, "0x%X", CFG_KERN_ADDR);
+		char *partition;
+		char *bootargs;
+		char *commands[] = {
+			"console=ttyS1,115200n8 root=/dev/mtdblock5",
+			"console=ttyS1,115200n8 root=/dev/mtdblock7"
+		};
+
+		partition = getenv("partition");
+		bootargs = getenv("bootargs");
+		if (!strcmp(partition, "firmware_bak")) {
+			sprintf(addr_str, "0x%X", 0xbd050000);
+			if (strcmp(bootargs, commands[1])) {
+				setenv("bootargs", commands[1]);
+				saveenv();
+			}
+		} else {
+			sprintf(addr_str, "0x%X", CFG_KERN_ADDR);
+			if (strcmp(bootargs, commands[0])) {
+				setenv("bootargs", commands[0]);
+				saveenv();
+			}
+		}
 		argv[1] = &addr_str[0];
 		printf("   \n3: System Boot system code via Flash.\n");
 		do_bootm(cmdtp, 0, 2, argv);
