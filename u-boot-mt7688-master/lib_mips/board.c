@@ -1956,6 +1956,8 @@ void board_init_r (gd_t *id, ulong dest_addr)
 	gpio_init();
 	printf( "\nif you press the WPS button for more than 2 seconds will automatically enter the Update mode,more than 7 seconds enter gpio test mode\n");
 	int counter = 0;
+	/* add by joker, delete time delay */
+#if 0
 	for(i=0;i<10;i++){
 		led_on();
 		udelay(100000);
@@ -1969,6 +1971,7 @@ void board_init_r (gd_t *id, ulong dest_addr)
 		if(counter>7)
 		break;
 	}
+#endif
 	udelay(100000);
 	if ( counter > 7 ) {
 		printf( "\n\nAll GPIO test...\n\n");
