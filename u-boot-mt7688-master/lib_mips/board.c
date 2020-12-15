@@ -2006,10 +2006,17 @@ void board_init_r (gd_t *id, ulong dest_addr)
 		char *argv[2];
 		char *partition;
 		char *bootargs;
+#ifdef ON_BOARD_1024M_DRAM_COMPONENT
+		char *commands[] = {
+			"console=ttyS1,115200n8 root=/dev/mtdblock5 memsize=128",
+			"console=ttyS1,115200n8 root=/dev/mtdblock7 memsize=128"
+		};
+#else
 		char *commands[] = {
 			"console=ttyS1,115200n8 root=/dev/mtdblock5",
 			"console=ttyS1,115200n8 root=/dev/mtdblock7"
 		};
+#endif
 
 		partition = getenv("partition");
 		bootargs = getenv("bootargs");
